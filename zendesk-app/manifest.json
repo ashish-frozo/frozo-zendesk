@@ -1,0 +1,34 @@
+{
+    "name": "EscalateSafe",
+    "author": {
+        "name": "Frozo",
+        "email": "support@frozo.com"
+    },
+    "version": "0.1.0",
+    "frameworkVersion": "2.0",
+    "location": {
+        "support": {
+            "ticket_sidebar": {
+                "url": "assets/index.html",
+                "flexible": true,
+                "size": {
+                    "height": "600px"
+                }
+            }
+        }
+    },
+    "defaultLocale": "en",
+    "private": true,
+    "parameters": [
+        {
+            "name": "api_base_url",
+            "type": "text",
+            "required": true,
+            "default": "http://localhost:8000"
+        }
+    ],
+    "domainWhitelist": [
+        "localhost:8000",
+        "*.escalatesafe.app"
+    ]
+}
