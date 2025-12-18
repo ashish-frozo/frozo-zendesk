@@ -10,10 +10,8 @@ Handles:
 
 import logging
 from typing import Dict, List, Optional, Any
-from zenpy import Zenpy
-from zenpy.lib.api_objects import Ticket, Comment
+import requests
 import os
-from api.config import settings
 
 logger = logging.getLogger(__name__)
 
