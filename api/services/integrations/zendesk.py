@@ -11,6 +11,8 @@ Handles:
 import logging
 from typing import Dict, List, Optional, Any
 import requests
+from zenpy import Zenpy
+from zenpy.lib.api_objects import Ticket, Comment
 import os
 
 logger = logging.getLogger(__name__)
