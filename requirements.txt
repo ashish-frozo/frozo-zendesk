@@ -47,6 +47,10 @@ httpx==0.25.2
 pytest==7.4.3
 pytest-asyncio==0.21.1
 
-# Production
+# Production dependencies
 gunicorn==21.2.0
-sentry-sdk[fastapi]==1.39.1
+psycopg2-binary==2.9.9
+sentry-sdk[fastapi]==1.39.2
+
+# spaCy language model (direct URL)
+https://github.com/explosion/spacy-models/releases/download/en_core_web_lg-3.7.1/en_core_web_lg-3.7.1-py3-none-any.whl
