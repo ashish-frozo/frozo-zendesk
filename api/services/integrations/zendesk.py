@@ -78,8 +78,8 @@ class ZendeskService:
                 "description": ticket.description or "",
                 "status": ticket.status,
                 "priority": ticket.priority,
-                "created_at": ticket.created_at.isoformat() if ticket.created_at else None,
-                "updated_at": ticket.updated_at.isoformat() if ticket.updated_at else None,
+                "created_at": ticket.created_at.isoformat() if hasattr(ticket.created_at, 'isoformat') else str(ticket.created_at),
+                "updated_at": ticket.updated_at.isoformat() if hasattr(ticket.updated_at, 'isoformat') else str(ticket.updated_at),
                 "requester": {
                     "id": requester.id,
                     "name": requester.name,
@@ -130,7 +130,7 @@ class ZendeskService:
                     "id": comment.id,
                     "body": comment.body or "",
                     "public": True,
-                    "created_at": comment.created_at.isoformat() if comment.created_at else None,
+                    "created_at": comment.created_at.isoformat() if hasattr(comment.created_at, 'isoformat') else str(comment.created_at) if comment.created_at else None,
                     "author_id": comment.author_id
                 })
             
@@ -141,7 +141,7 @@ class ZendeskService:
                         "id": comment.id,
                         "body": comment.body or "",
                         "public": False,
-                        "created_at": comment.created_at.isoformat() if comment.created_at else None,
+                        "created_at": comment.created_at.isoformat() if hasattr(comment.created_at, 'isoformat') else str(comment.created_at) if comment.created_at else None,
                         "author_id": comment.author_id
                     })
             
