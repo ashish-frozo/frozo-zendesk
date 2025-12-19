@@ -16,7 +16,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from api.db.database import get_db
-from api.db.models import Run, RunStatus, Tenant, TenantConfig, AuditEvent
+from api.db.models import Run, RunStatus, Tenant, TenantConfig, AuditEvent, Export
 from api.schemas.runs import (
     RunCreateRequest,
     RunCreateResponse,
