@@ -1,6 +1,10 @@
 [build]
 builder = "NIXPACKS"
 
+[build.nixpacksSettings]
+installCommand = "pip install -r requirements.txt"
+buildCommand = "python -m spacy download en_core_web_lg"
+
 [deploy]
 numReplicas = 1
 restartPolicyType = "ON_FAILURE"
