@@ -76,7 +76,10 @@ async def create_run(
     """
     try:
         # Get tenant (simplified - should come from middleware)
-        tenant = get_current_tenant(db, subdomain="demo")
+        # Use environment variable or default to 'demo'
+        from api.config import settings
+        actual_subdomain = settings.zendesk_subdomain if hasattr(settings, 'zendesk_subdomain') else "frozoai"
+        tenant = get_current_tenant(db, subdomain=actual_subdomain)
         
         # Get tenant config
         config = db.query(TenantConfig).filter(TenantConfig.tenant_id == tenant.id).first()
