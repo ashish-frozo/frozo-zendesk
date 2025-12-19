@@ -83,7 +83,7 @@ async def root():
 
 # Mount routers
 app.include_router(health.router, tags=["health"])
-app.include_router(runs.router, prefix="/v1/runs/", tags=["runs"])  # Note: trailing slash to match route definitions
+app.include_router(runs.router, prefix="/v1/runs", tags=["runs"])
 # app.include_router(config.router, prefix="/v1/config", tags=["config"])
 # app.include_router(admin.router, prefix="/v1/admin", tags=["admin"])
 
