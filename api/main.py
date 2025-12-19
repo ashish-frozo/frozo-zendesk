@@ -46,7 +46,9 @@ app = FastAPI(
     title="EscalateSafe API",
     description="PII-Safe Zendesk → Jira Escalation System",
     version="0.1.0",
-    lifespan=lifespan
+    lifespan=lifespan,
+    redirect_slashes=False,  # Prevent automatic redirects that can cause HTTP/HTTPS issues
+    root_path_in_servers=False
 )
 
 # CORS middleware - Allow all origins for Zendesk app compatibility
