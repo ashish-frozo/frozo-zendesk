@@ -24,11 +24,11 @@
             "name": "api_base_url",
             "type": "text",
             "required": true,
-            "default": "http://localhost:8000"
+            "default": "https://web-production-ccebe.up.railway.app"
         }
     ],
     "domainWhitelist": [
-        "localhost:8000",
-        "*.escalatesafe.app"
+        "web-production-ccebe.up.railway.app",
+        "*.up.railway.app"
     ]
 }

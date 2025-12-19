@@ -1,0 +1,35 @@
+{
+    "app": {
+        "name": "EscalateSafe",
+        "short_description": "PII-safe Zendesk to Jira escalation",
+        "long_description": "Automatically redacts PII from tickets before escalating to Jira",
+        "installation_instructions": "Install and configure API base URL to point to your EscalateSafe backend"
+    },
+    "button": {
+        "generate": "Generate Engineering Pack",
+        "approve": "Approve & Create Jira Issue",
+        "cancel": "Cancel"
+    },
+    "status": {
+        "idle": "Ready to generate pack",
+        "generating": "Generating preview...",
+        "preview": "Review sanitized content",
+        "exporting": "Creating Jira issue...",
+        "exported": "Successfully exported!",
+        "failed": "Export failed",
+        "cancelled": "Cancelled"
+    },
+    "label": {
+        "ticket_id": "Ticket ID",
+        "subject": "Subject",
+        "entities_detected": "PII Entities Detected",
+        "total_redactions": "Total Redactions",
+        "jira_issue": "Jira Issue"
+    },
+    "error": {
+        "api_error": "API error occurred",
+        "network_error": "Network connection failed",
+        "invalid_response": "Invalid response from server",
+        "export_failed": "Failed to create Jira issue"
+    }
+}
