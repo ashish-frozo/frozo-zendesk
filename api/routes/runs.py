@@ -361,9 +361,10 @@ _Total PII entities redacted: {run.redaction_report.get('total_redactions', 0)}_
             export_record = existing_export
         
         try:
-            # Create Jira client
+            # Create Jira client with proper URL
+            jira_server = f"https://{settings.jira_cloud_id}.atlassian.net" if settings.jira_cloud_id else "https://your-domain.atlassian.net"
             jira = create_jira_client(
-                server=settings.jira_cloud_id or "https://your-domain.atlassian.net",
+                server=jira_server,
                 email=settings.jira_user_email,
                 api_token=settings.jira_api_token
             )
