@@ -237,13 +237,13 @@
 
             while (attempts < maxAttempts) {
                 try {
-                    const url = `${apiBaseUrl}/v1/runs/${runId}/`.replace('http://', 'https://');
+                    const url = `${apiBaseUrl}/v1/runs/${runId}`.replace('http://', 'https://');
                     const response = await fetch(url);
                     const data = await response.json();
 
                     if (data.status === 'ready_for_review') {
                         // Get preview
-                        const previewUrl = `${apiBaseUrl}/v1/runs/${runId}/preview/text/`.replace('http://', 'https://');
+                        const previewUrl = `${apiBaseUrl}/v1/runs/${runId}/preview/text`.replace('http://', 'https://');
                         const previewResponse = await fetch(previewUrl);
                         const previewData = await previewResponse.json();
                         renderPreview(previewData);
@@ -266,7 +266,7 @@
             renderLoading('Creating Jira issue...');
 
             try {
-                const url = `${apiBaseUrl}/v1/runs/${runId}/approve/`.replace('http://', 'https://');
+                const url = `${apiBaseUrl}/v1/runs/${runId}/approve`.replace('http://', 'https://');
                 console.log('[EscalateSafe] Approve URL:', url);
 
                 const response = await fetch(url, {
@@ -274,8 +274,8 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         jira: {
-                            project_key: "SUP",
-                            issue_type: "Bug",
+                            project_key: "SCRUM",
+                            issue_type: "Task",
                             priority: "High",
                             labels: ["support-escalation", "escalatesafe"]
                         },
