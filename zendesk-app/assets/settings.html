@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>EscalateSafe Settings</title>
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/combine/npm/@zendeskgarden/css-bedrock@8/dist/index.min.css,npm/@zendeskgarden/css-utilities@4/dist/index.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background-color: #f5f6f8;
+        }
+
+        #root {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #6b7280;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid #e5e7eb;
+            border-top-color: #2563eb;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root">
+        <div class="loading">
+            <div class="spinner"></div>
+            <p>Loading settings...</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@zendesk/app-framework-sdk@2/index.js"></script>
+    <script type="module">
+        import Settings from './src/Settings.tsx';
+        import { createRoot } from 'react-dom/client';
+        import React from 'react';
+
+        (async function () {
+            try {
+                const client = ZAFClient.init();
+
+                // Get app settings
+                const metadata = await client.metadata();
+                const context = await client.context();
+
+                const apiBaseUrl = metadata.settings.api_base_url || 'https://web-production-ccebe.up.railway.app';
+
+                // Get tenant ID (for now use hardcoded, later from middleware/OAuth)
+                const tenantId = 1;
+
+                // Render Settings component
+                const root = document.getElementById('root');
+                const reactRoot = createRoot(root);
+
+                reactRoot.render(
+                    React.createElement(Settings, {
+                        client: client,
+                        apiBaseUrl: apiBaseUrl,
+                        tenantId: tenantId
+                    })
+                );
+
+            } catch (error) {
+                console.error('[EscalateSafe Settings] Initialization error:', error);
+                document.getElementById('root').innerHTML = `
+                    <div class="loading">
+                        <p style="color: #dc2626;">Failed to load settings: ${error.message}</p>
+                    </div>
+                `;
+            }
+        })();
+    </script>
+</body>
+
+</html>
