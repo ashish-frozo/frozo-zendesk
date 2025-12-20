@@ -15,9 +15,217 @@
             background-color: #f5f6f8;
         }
 
-        #root {
-            max-width: 900px;
+        .settings-container {
+            max-width: 800px;
             margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .settings-header {
+            padding: 24px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .settings-header h2 {
+            margin: 0 0 8px 0;
+            font-size: 24px;
+            color: #1f2937;
+        }
+
+        .settings-description {
+            margin: 0;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .message {
+            margin: 20px 24px;
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .message.show {
+            display: block;
+        }
+
+        .message.success {
+            background-color: #d1fae5;
+            border: 1px solid #6ee7b7;
+            color: #065f46;
+        }
+
+        .message.error {
+            background-color: #fee2e2;
+            border: 1px solid #fca5a5;
+            color: #991b1b;
+        }
+
+        .settings-tabs {
+            display: flex;
+            gap: 0;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 0 24px;
+        }
+
+        .tab {
+            background: none;
+            border: none;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #6b7280;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .tab:hover {
+            color: #1f2937;
+            background-color: #f9fafb;
+        }
+
+        .tab.active {
+            color: #2563eb;
+            border-bottom-color: #2563eb;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 24px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-section {
+            margin-bottom: 24px;
+        }
+
+        .form-section h3 {
+            margin: 0 0 16px 0;
+            font-size: 16px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="url"],
+        .form-group input[type="password"],
+        .form-group select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .help-text {
+            display: block;
+            margin-top: 4px;
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .help-text a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background-color: #2563eb;
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background-color: #1d4ed8;
+        }
+
+        .btn-primary:disabled {
+            background-color: #93c5fd;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background-color: #f3f4f6;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background-color: #e5e7eb;
+        }
+
+        .connection-status {
+            margin-top: 12px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .connection-status.show {
+            display: block;
+        }
+
+        .connection-status.connected {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+
+        .connection-status.failed {
+            background-color: #fee2e2;
+            color: #991b1b;
         }
 
         .loading {
@@ -25,73 +233,363 @@
             padding: 40px;
             color: #6b7280;
         }
-
-        .spinner {
-            display: inline-block;
-            width: 40px;
-            height: 40px;
-            border: 4px solid #e5e7eb;
-            border-top-color: #2563eb;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
     </style>
 </head>
 
 <body>
     <div id="root">
-        <div class="loading">
-            <div class="spinner"></div>
-            <p>Loading settings...</p>
-        </div>
+        <div class="loading">Loading settings...</div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@zendesk/app-framework-sdk@2/index.js"></script>
-    <script type="module">
-        import Settings from './src/Settings.tsx';
-        import { createRoot } from 'react-dom/client';
-        import React from 'react';
+    <script>
+        let client;
+        let apiBaseUrl;
+        let tenantId = 1; // Hardcoded for now, will come from OAuth later
 
-        (async function () {
-            try {
-                const client = ZAFClient.init();
+        async function init() {
+            client = ZAFClient.init();
 
-                // Get app settings
-                const metadata = await client.metadata();
-                const context = await client.context();
+            const metadata = await client.metadata();
+            apiBaseUrl = metadata.settings.api_base_url || 'https://web-production-ccebe.up.railway.app';
 
-                const apiBaseUrl = metadata.settings.api_base_url || 'https://web-production-ccebe.up.railway.app';
+            renderUI();
+            loadAllConfigs();
+        }
 
-                // Get tenant ID (for now use hardcoded, later from middleware/OAuth)
-                const tenantId = 1;
-
-                // Render Settings component
-                const root = document.getElementById('root');
-                const reactRoot = createRoot(root);
-
-                reactRoot.render(
-                    React.createElement(Settings, {
-                        client: client,
-                        apiBaseUrl: apiBaseUrl,
-                        tenantId: tenantId
-                    })
-                );
-
-            } catch (error) {
-                console.error('[EscalateSafe Settings] Initialization error:', error);
-                document.getElementById('root').innerHTML = `
-                    <div class="loading">
-                        <p style="color: #dc2626;">Failed to load settings: ${error.message}</p>
+        function renderUI() {
+            document.getElementById('root').innerHTML = `
+                <div class="settings-container">
+                    <div class="settings-header">
+                        <h2>⚙️ EscalateSafe Settings</h2>
+                        <p class="settings-description">Configure your integrations and PII detection preferences</p>
                     </div>
-                `;
+                    
+                    <div class="message" id="message"></div>
+                    
+                    <div class="settings-tabs">
+                        <button class="tab active" onclick="switchTab('jira')">🎫 Jira</button>
+                        <button class="tab" onclick="switchTab('slack')">💬 Slack</button>
+                        <button class="tab" onclick="switchTab('redaction')">🔒 Redaction</button>
+                    </div>
+                    
+                    <div class="tab-content active" id="jira-tab">
+                        ${renderJiraTab()}
+                    </div>
+                    
+                    <div class="tab-content" id="slack-tab">
+                        ${renderSlackTab()}
+                    </div>
+                    
+                    <div class="tab-content" id="redaction-tab">
+                        ${renderRedactionTab()}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderJiraTab() {
+            return `
+                <div class="form-section">
+                    <h3>Jira Server</h3>
+                    <div class="form-group">
+                        <label>Server URL *</label>
+                        <input type="url" id="jira-server" placeholder="https://your-company.atlassian.net">
+                        <span class="help-text">Your Jira Cloud URL</span>
+                    </div>
+                    <div class="form-group">
+                        <label>Email *</label>
+                        <input type="email" id="jira-email" placeholder="your-email@company.com">
+                    </div>
+                    <div class="form-group">
+                        <label>API Token *</label>
+                        <input type="password" id="jira-token" placeholder="Enter your Jira API token">
+                        <span class="help-text">
+                            <a href="https://id.atlassian.com/manage-profile/security/api-tokens" target="_blank">Generate API token</a>
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3>Default Issue Settings</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Project Key *</label>
+                            <input type="text" id="jira-project" placeholder="SCRUM">
+                        </div>
+                        <div class="form-group">
+                            <label>Issue Type</label>
+                            <select id="jira-issue-type">
+                                <option value="Task">Task</option>
+                                <option value="Bug">Bug</option>
+                                <option value="Story">Story</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Priority</label>
+                            <select id="jira-priority">
+                                <option value="Highest">Highest</option>
+                                <option value="High">High</option>
+                                <option value="Medium">Medium</option>
+                                <option value="Low">Low</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button class="btn btn-secondary" onclick="testJiraConnection()">🔌 Test Connection</button>
+                    <button class="btn btn-primary" onclick="saveJiraConfig()">💾 Save Configuration</button>
+                </div>
+                
+                <div class="connection-status" id="jira-status"></div>
+            `;
+        }
+
+        function renderSlackTab() {
+            return `
+                <div class="form-section">
+                    <h3>Slack Webhook</h3>
+                    <div class="form-group">
+                        <label>Webhook URL *</label>
+                        <input type="url" id="slack-webhook" placeholder="https://hooks.slack.com/services/...">
+                        <span class="help-text">
+                            <a href="https://api.slack.com/messaging/webhooks" target="_blank">Create Slack webhook</a>
+                        </span>
+                    </div>
+                    <div class="form-group">
+                        <label>Channel (optional)</label>
+                        <input type="text" id="slack-channel" placeholder="#engineering">
+                        <span class="help-text">For display purposes only</span>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button class="btn btn-secondary" onclick="testSlackConnection()">🔌 Test Connection</button>
+                    <button class="btn btn-primary" onclick="saveSlackConfig()">💾 Save Configuration</button>
+                </div>
+                
+                <div class="connection-status" id="slack-status"></div>
+            `;
+        }
+
+        function renderRedactionTab() {
+            return `
+                <div class="form-section">
+                    <h3>Detection Settings</h3>
+                    <div class="form-group">
+                        <label>Confidence Threshold: <span id="threshold-value">50</span>%</label>
+                        <input type="range" id="confidence-threshold" min="0" max="100" value="50" 
+                               oninput="document.getElementById('threshold-value').textContent = this.value"
+                               style="width: 100%">
+                        <span class="help-text">Lower = More detections, Higher = More accurate</span>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button class="btn btn-primary" onclick="saveRedactionConfig()">💾 Save Settings</button>
+                </div>
+            `;
+        }
+
+        function switchTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Update tab content
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+        }
+
+        function showMessage(type, text) {
+            const messageEl = document.getElementById('message');
+            messageEl.className = `message ${type} show`;
+            messageEl.textContent = (type === 'success' ? '✅ ' : '❌ ') + text;
+            setTimeout(() => messageEl.classList.remove('show'), 5000);
+        }
+
+        async function loadAllConfigs() {
+            await loadJiraConfig();
+            await loadSlackConfig();
+            await loadRedactionConfig();
+        }
+
+        async function loadJiraConfig() {
+            try {
+                const response = await fetch(`${apiBaseUrl}/v1/config/tenants/${tenantId}/jira`);
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('jira-server').value = data.server_url || '';
+                    document.getElementById('jira-email').value = data.email || '';
+                    document.getElementById('jira-project').value = data.project_key || '';
+                    document.getElementById('jira-issue-type').value = data.issue_type || 'Task';
+                    document.getElementById('jira-priority').value = data.priority || 'High';
+                }
+            } catch (error) {
+                console.error('Failed to load Jira config:', error);
             }
-        })();
+        }
+
+        async function saveJiraConfig() {
+            const config = {
+                server_url: document.getElementById('jira-server').value,
+                email: document.getElementById('jira-email').value,
+                api_token: document.getElementById('jira-token').value,
+                project_key: document.getElementById('jira-project').value.toUpperCase(),
+                issue_type: document.getElementById('jira-issue-type').value,
+                priority: document.getElementById('jira-priority').value,
+                labels: ['support-escalation', 'escalatesafe']
+            };
+
+            if (!config.server_url || !config.email || !config.api_token || !config.project_key) {
+                showMessage('error', 'Please fill in all required fields');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${apiBaseUrl}/v1/config/tenants/${tenantId}/jira`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(config)
+                });
+
+                if (response.ok) {
+                    showMessage('success', 'Jira configuration saved successfully');
+                    document.getElementById('jira-token').value = ''; // Clear token after save
+                } else {
+                    const error = await response.json();
+                    showMessage('error', error.detail || 'Failed to save configuration');
+                }
+            } catch (error) {
+                showMessage('error', 'Failed to save configuration');
+            }
+        }
+
+        async function testJiraConnection() {
+            try {
+                const response = await fetch(`${apiBaseUrl}/v1/config/tenants/${tenantId}/test-connection`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ service: 'jira' })
+                });
+
+                const result = await response.json();
+                const statusEl = document.getElementById('jira-status');
+                statusEl.className = `connection-status show ${result.success ? 'connected' : 'failed'}`;
+                statusEl.textContent = result.success ? '✅ Connected' : '❌ ' + result.message;
+            } catch (error) {
+                showMessage('error', 'Connection test failed');
+            }
+        }
+
+        async function loadSlackConfig() {
+            try {
+                const response = await fetch(`${apiBaseUrl}/v1/config/tenants/${tenantId}/slack`);
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('slack-channel').value = data.channel || '';
+                }
+            } catch (error) {
+                console.error('Failed to load Slack config:', error);
+            }
+        }
+
+        async function saveSlackConfig() {
+            const config = {
+                webhook_url: document.getElementById('slack-webhook').value,
+                channel: document.getElementById('slack-channel').value,
+                enabled: true
+            };
+
+            if (!config.webhook_url) {
+                showMessage('error', 'Please enter a Slack webhook URL');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${apiBaseUrl}/v1/config/tenants/${tenantId}/slack`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(config)
+                });
+
+                if (response.ok) {
+                    showMessage('success', 'Slack configuration saved successfully');
+                    document.getElementById('slack-webhook').value = ''; // Clear webhook after save
+                } else {
+                    const error = await response.json();
+                    showMessage('error', error.detail || 'Failed to save configuration');
+                }
+            } catch (error) {
+                showMessage('error', 'Failed to save configuration');
+            }
+        }
+
+        async function testSlackConnection() {
+            try {
+                const response = await fetch(`${apiBaseUrl}/v1/config/tenants/${tenantId}/test-connection`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ service: 'slack' })
+                });
+
+                const result = await response.json();
+                const statusEl = document.getElementById('slack-status');
+                statusEl.className = `connection-status show ${result.success ? 'connected' : 'failed'}`;
+                statusEl.textContent = result.success ? '✅ Connected' : '❌ ' + result.message;
+            } catch (error) {
+                showMessage('error', 'Connection test failed');
+            }
+        }
+
+        async function loadRedactionConfig() {
+            try {
+                const response = await fetch(`${apiBaseUrl}/v1/config/tenants/${tenantId}/redaction`);
+                if (response.ok) {
+                    const data = await response.json();
+                    const threshold = Math.round(data.confidence_threshold * 100);
+                    document.getElementById('confidence-threshold').value = threshold;
+                    document.getElementById('threshold-value').textContent = threshold;
+                }
+            } catch (error) {
+                console.error('Failed to load redaction config:', error);
+            }
+        }
+
+        async function saveRedactionConfig() {
+            const threshold = parseInt(document.getElementById('confidence-threshold').value) / 100;
+
+            const config = {
+                confidence_threshold: threshold,
+                enable_indian_entities: false,
+                enabled_entity_types: [
+                    'EMAIL_ADDRESS', 'PHONE_NUMBER', 'CREDIT_CARD',
+                    'PERSON', 'LOCATION', 'API_KEY'
+                ],
+                allow_internal_notes: false
+            };
+
+            try {
+                const response = await fetch(`${apiBaseUrl}/v1/config/tenants/${tenantId}/redaction`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(config)
+                });
+
+                if (response.ok) {
+                    showMessage('success', 'Redaction settings saved successfully');
+                } else {
+                    const error = await response.json();
+                    showMessage('error', error.detail || 'Failed to save settings');
+                }
+            } catch (error) {
+                showMessage('error', 'Failed to save settings');
+            }
+        }
+
+        // Initialize when SDK is ready
+        init();
     </script>
 </body>
 
