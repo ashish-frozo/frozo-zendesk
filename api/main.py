@@ -17,7 +17,7 @@ from contextlib import asynccontextmanager
 from api.config import settings
 from api.db.database import engine
 from api.db.models import Base
-from api.routes import runs, health
+from api.routes import runs, health, config
 
 # Configure logging
 logging.basicConfig(
