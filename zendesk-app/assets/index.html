@@ -159,6 +159,20 @@
             if (ticketLoaded) renderIdle();
         });
 
+        // Open settings in modal - define this BEFORE renderIdle
+        window.openSettings = async function () {
+            try {
+                console.log('[EscalateSafe] Opening settings...');
+
+                // Open settings page in new window (simpler than modal)
+                const settingsUrl = 'https://frozoai.zendesk.com/agent/apps/settings';
+                window.open(settingsUrl, '_blank', 'width=900,height=700');
+            } catch (error) {
+                console.error('[EscalateSafe] Failed to open settings:', error);
+                alert('Failed to open settings. Please try again.');
+            }
+        };
+
         function renderIdle() {
             app.innerHTML = `
                 <div class="info">
