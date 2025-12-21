@@ -498,11 +498,15 @@ _Total PII entities redacted: {run.redaction_report.get('total_redactions', 0)}_
             run.status = RunStatus.EXPORTED
             db.commit()
             
+            # Build Jira issue URL
+            jira_url = f"{jira_server}/browse/{issue_result['key']}"
+            
             return ApproveResponse(
                 run_id=run_id,
                 status="exported",
                 message=f"Successfully exported to Jira: {issue_result['key']}",
-                jira_issue_key=issue_result["key"]
+                jira_issue_key=issue_result["key"],
+                jira_issue_url=jira_url
             )
             
         except Exception as jira_error:

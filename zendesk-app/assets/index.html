@@ -511,11 +511,15 @@
             `;
         }
 
-        function renderSuccess(jiraKey) {
+        function renderSuccess(jiraKey, jiraUrl) {
+            const jiraLink = jiraUrl 
+                ? `<a href="${jiraUrl}" target="_blank" style="color: #0052CC; text-decoration: underline;">${jiraKey}</a>`
+                : jiraKey;
+            
             app.innerHTML = `
                 <div class="success">
                     <strong>✅ Successfully Exported!</strong><br><br>
-                    <strong>Jira Issue:</strong> ${jiraKey}<br><br>
+                    <strong>Jira Issue:</strong> ${jiraLink}<br><br>
                     <button class="btn-primary" style="background: #28a745;" onclick="location.reload()">
                         Create Another
                     </button>
@@ -603,7 +607,7 @@
                 });
 
                 const data = await response.json();
-                renderSuccess(data.jira_issue_key);
+                renderSuccess(data.jira_issue_key, data.jira_issue_url);
 
             } catch (error) {
                 console.error('[EscalateSafe] Export error:', error);

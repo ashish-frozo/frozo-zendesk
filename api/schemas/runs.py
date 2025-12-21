@@ -52,8 +52,9 @@ class ApproveRequest(BaseModel):
 
 
 class ApproveResponse(BaseModel):
-    """Response after approving export."""
+    """Response from approve and export operation."""
     run_id: int
     status: str
     message: str
-    jira_issue_key: Optional[str] = None
+    jira_issue_key: str
+    jira_issue_url: Optional[str] = None  # Clickable link to Jira issue
