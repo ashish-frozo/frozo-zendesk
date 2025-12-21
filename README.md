@@ -1,225 +1,301 @@
-# EscalateSafe
+# EscalateSafe - PII-Safe Zendesk to Jira Escalation
 
-**PII-Safe Zendesk → Jira Escalation System**
+<div align="center">
 
-EscalateSafe prevents PII leakage during support escalations by sanitizing Zendesk tickets (text + images + PDFs) before creating Jira issues and Slack notifications.
+🛡️ **Secure Support Ticket Escalation with Automatic PII Redaction**
 
-## Features
+[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/ashish-frozo/frozo-zendesk)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Zendesk](https://img.shields.io/badge/Zendesk-Compatible-orange.svg)](https://www.zendesk.com)
 
-- 🔒 **PII Redaction:** Rules-based detection (Presidio + custom patterns) for emails, phones, API keys, credit cards
-- 🖼️ **Image Sanitization:** OCR + masking (Tesseract/Cloud Vision hybrid)
-- 📄 **PDF Redaction:** Text-layer + scanned PDF support via PyMuPDF
-- 🤖 **LLM Engineering Packs:** Structured bug reports using OpenAI GPT-4 (sanitized-only input)
-- ✅ **Approval Gate:** Preview before export, always
-- 📊 **Audit Trail:** Full logging for compliance
-- 🔐 **Tenant Isolation:** Multi-tenant with strict data separation
+[Features](#features) • [Installation](#installation) • [Documentation](#documentation) • [Support](#support)
 
-## Architecture
+</div>
 
-```
-┌─────────────────┐
-│  Zendesk App    │  (React + ZAF SDK)
-│   (Sidebar)     │
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐       ┌──────────────┐
-│  FastAPI        │◀─────▶│  PostgreSQL  │
-│  Backend        │       └──────────────┘
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐       ┌──────────────┐
-│  Celery Workers │◀─────▶│    Redis     │
-│  (OCR, Redact)  │       └──────────────┘
-└─────────────────┘
-         │
-         ▼
-┌─────────────────────────────────────────┐
-│  Integrations                           │
-│  • Zendesk API                          │
-│  • Jira Cloud                           │
-│  • Slack Webhooks                       │
-│  • OpenAI (LLM)                         │
-│  • Google Cloud Vision (OCR fallback)   │
-│  • S3-compatible storage (MinIO/S3/R2)  │
-└─────────────────────────────────────────┘
-```
+---
 
-## Quick Start
+## 🎯 Overview
 
-### Prerequisites
+**EscalateSafe** is a Zendesk marketplace app that enables secure escalation of support tickets to engineering teams while automatically detecting and redacting personally identifiable information (PII). Perfect for companies that need to share customer issues with engineering without compromising customer privacy.
 
+### The Problem
+
+Support teams often need to escalate customer issues to engineering, but customer tickets contain sensitive information:
+- Customer names, emails, phone numbers
+- Credit card numbers, API keys
+- Personally identifiable information (PII)
+
+Sharing this data with engineering teams violates privacy policies and regulations (GDPR, CCPA, etc.).
+
+### The Solution
+
+EscalateSafe automatically:
+1. ✅ **Detects PII** using AI-powered recognition (Microsoft Presidio)
+2. ✅ **Redacts sensitive data** before sharing
+3. ✅ **Shows preview** for agent review before export
+4. ✅ **Creates Jira issues** with sanitized content
+5. ✅ **Notifies via Slack** when escalations are created
+6. ✅ **Multi-tenant OAuth** - Each customer's data stays isolated
+
+---
+
+## ✨ Features
+
+### 🔒 PII Detection & Redaction
+
+**Automatically detects and redacts:**
+- Names (using NLP)
+- Email addresses
+- Phone numbers (all formats: +1-555-123-4567, (555) 987-6543, etc.)
+- Credit cards (all formats: 4532-1234-5678-9012, dashed, spaced)
+- API keys and tokens
+- Locations and addresses
+- Custom patterns (configurable)
+
+**Advanced capabilities:**
+- Confidence scoring (adjustable threshold)
+- Low-confidence warnings
+- Smart deduplication (skips copied comments)
+- India-specific entities (PAN, GSTIN) - optional
+
+### 🎯 Jira Integration
+
+- Creates engineering tickets automatically
+- Uses sanitized, PII-free content
+- Configurable project, issue type, priority
+- Clickable links back to Jira issue
+- Custom field mapping
+- Idempotency (no duplicate issues)
+
+### 📢 Slack Notifications
+
+- Notifies team when escalations created
+- Includes Jira link and ticket summary
+- Configurable channels
+- Rich formatting
+
+### 🛡️ Multi-Tenant OAuth
+
+- Each customer gets own OAuth tokens
+- Complete data isolation
+- Self-service installation
+- Automatic token refresh
+- Marketplace-ready
+
+### ⚙️ Settings UI
+
+- In-app configuration (no admin panel needed)
+- Jira connection testing
+- Slack webhook configuration
+- Redaction settings
+- Real-time validation
+
+---
+
+## 🚀 Quick Start
+
+### For End Users (Zendesk Agents)
+
+1. **Install the app** from Zendesk Marketplace
+2. **Authorize** when prompted (OAuth flow)
+3. **Configure** Jira & Slack in Settings
+4. **Open a ticket** → See EscalateSafe in sidebar
+5. **Click "Generate Pack"** → Review redacted preview
+6. **Approve** → Jira issue created automatically!
+
+### For Administrators
+
+See [INSTALLATION.md](docs/INSTALLATION.md) for detailed setup guide.
+
+---
+
+## 📋 Requirements
+
+### Zendesk
+- Zendesk Suite or Support Professional plan
+- Admin access for app installation
+- OAuth permissions
+
+### Jira
+- Jira Cloud account
+- API token
+- Project with appropriate permissions
+
+### Slack (Optional)
+- Workspace admin access
+- Incoming webhook URL
+
+### Backend (Self-Hosted)
 - Python 3.11+
-- Node.js 18+
-- Docker & Docker Compose
-- PostgreSQL 15
-- Redis 7
+- PostgreSQL 14+
+- Railway/Heroku/AWS (or any hosting)
 
-### 1. Clone and Setup
+---
 
-```bash
-cd /Users/ashishdhiman/WORK/Frozo-projects/frozo-zendesk
+## 📚 Documentation
 
-# Copy environment template
-cp .env.example .env
+| Document | Description |
+|----------|-------------|
+| [Installation Guide](docs/INSTALLATION.md) | Step-by-step setup instructions |
+| [User Guide](docs/USER_GUIDE.md) | How to use the app |
+| [Developer Guide](docs/DEVELOPER.md) | Technical architecture & development |
+| [API Reference](docs/API.md) | Backend API documentation |
+| [Deployment Guide](docs/DEPLOYMENT.md) | Production deployment |
+| [Security](docs/SECURITY.md) | Privacy & security details |
+| [Marketplace](docs/MARKETPLACE.md) | Submission guide |
 
-# Edit .env with your credentials
-# - OpenAI API key
-# - Zendesk OAuth credentials
-# - Jira API token
-# - Slack webhook URL
-```
+---
 
-### 2. Start Infrastructure
-
-```bash
-# Start PostgreSQL, Redis, MinIO
-docker-compose up -d
-
-# Verify services
-docker-compose ps
-```
-
-### 3. Backend Setup
-
-```bash
-# Create virtual environment
-python3 -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Download spaCy model (for Presidio)
-python -m spacy download en_core_web_lg
-
-# Run database migrations (auto-creates tables for now)
-python -m api.main
-```
-
-### 4. Start Backend
-
-```bash
-# Development mode with hot reload
-uvicorn api.main:app --reload --host 0.0.0.0 --port 8000
-
-# Or using the script
-python api/main.py
-```
-
-API will be available at: http://localhost:8000
-Docs: http://localhost:8000/docs
-
-### 5. Start Celery Worker
-
-```bash
-# In a new terminal
-celery -A worker.celery_app worker --loglevel=info
-```
-
-### 6. Zendesk App Setup
-
-```bash
-cd zendesk-app
-
-# Install dependencies
-npm install
-
-# Development mode
-npm run dev
-
-# Build for production
-npm run build
-
-# Validate app structure
-npm run validate
-```
-
-## Project Structure
+## 🏗️ Architecture
 
 ```
-frozo-zendesk/
-├── api/                    # FastAPI backend
-│   ├── db/
-│   │   ├── models.py       # SQLAlchemy models
-│   │   └── database.py     # DB connection
-│   ├── routes/             # API endpoints
-│   ├── services/
-│   │   ├── redaction/      # PII detection & redaction
-│   │   └── integrations/   # Zendesk, Jira, Slack
-│   ├── middleware/         # Tenant isolation
-│   ├── schemas/            # Pydantic models
-│   ├── config.py           # Settings
-│   └── main.py             # FastAPI app
-├── worker/                 # Celery tasks
-│   └── tasks/
-│       ├── ocr_image.py
-│       ├── redact_pdf.py
-│       ├── generate_llm_pack.py
-│       ├── export_jira.py
-│       └── post_slack.py
-├── zendesk-app/            # React ZAF app
-│   ├── src/
-│   │   ├── App.tsx
-│   │   └── components/
-│   └── manifest.json
-├── tests/                  # Testing
-│   ├── unit/
-│   ├── integration/
-│   ├── e2e/
-│   └── fixtures/
-├── docker-compose.yml
-├── requirements.txt
-└── .env.example
+┌─────────────────────────────────────────────┐
+│          Zendesk App (Frontend)             │
+│  - OAuth installation flow                  │
+│  - Ticket sidebar interface                 │
+│  - Settings UI                              │
+│  - Preview & approval                       │
+└──────────────────┬──────────────────────────┘
+                   │ HTTPS + OAuth
+┌──────────────────▼──────────────────────────┐
+│        Backend API (FastAPI)                │
+│  - OAuth token management                   │
+│  - PII detection (Presidio + spaCy)         │
+│  - Redaction engine                         │
+│  - Jira integration                         │
+│  - Slack notifications                      │
+└──────────────────┬──────────────────────────┘
+                   │
+┌──────────────────▼──────────────────────────┐
+│        PostgreSQL Database                  │
+│  - Tenants & OAuth tokens                   │
+│  - Runs & escalation history                │
+│  - Configuration                            │
+│  - Audit logs                               │
+└─────────────────────────────────────────────┘
 ```
 
-## Configuration
+---
 
-See [`.env.example`](./.env.example) for all available configuration options.
+## 🛠️ Technology Stack
 
-### Key Settings
+**Frontend:**
+- Zendesk App Framework (ZAF SDK 2.0)
+- Vanilla JavaScript
+- OAuth 2.0
 
-- **Internal Notes:** Default OFF, opt-in at tenant level
-- **PDF Limits:** 10 pages max, 10MB max
-- **Last Public Comments:** Default 1 (configurable)
-- **OCR:** Tesseract first, Cloud Vision fallback
-- **Storage:** S3-compatible (MinIO local, S3/R2 production)
+**Backend:**
+- Python 3.11
+- FastAPI
+- SQLAlchemy
+- Presidio (PII detection)
+- spaCy (NLP)
+- Zenpy (Zendesk API)
+- Jira Python SDK
 
-## Development Status
+**Database:**
+- PostgreSQL 14+
+- Encrypted token storage
 
-**Current Milestone:** M0 - Foundation ✅
-- [x] Project structure
-- [x] Docker Compose setup
-- [x] Database models
-- [x] FastAPI backend skeleton
-- [x] Zendesk app scaffold
-- [x] Zendesk integration service
+**Infrastructure:**
+- Railway (recommended)
+- Heroku, AWS, GCP (also supported)
 
-**Next:** M1 - PII Redaction (Week 2)
+---
 
-See [`task.md`](./task.md) for complete implementation checklist.
+## 🔐 Security & Privacy
 
-## Testing
+- ✅ **OAuth 2.0** - No hardcoded credentials
+- ✅ **Encrypted tokens** - AES-256 encryption at rest
+- ✅ **HTTPS only** - All API calls over TLS
+- ✅ **Tenant isolation** - Complete data separation
+- ✅ **No PII storage** - Redacted content only
+- ✅ **Audit logs** - Full trail of all escalations
+- ✅ **GDPR compliant** - Privacy by design
 
-```bash
-# Unit tests
-pytest tests/unit/ -v
+See [SECURITY.md](docs/SECURITY.md) for complete details.
 
-# Integration tests
-pytest tests/integration/ -v
+---
 
-# E2E tests
-pytest tests/e2e/ -v
+## 📊 Metrics & Analytics
 
-# Leak prevention tests (must pass before pilot)
-python tests/leak_prevention_test.py --dataset tests/fixtures/synthetic_dataset/
-```
+Track your escalations:
+- Total escalations created
+- PII entities detected
+- Redaction statistics
+- Export success rate
+- OAuth health per tenant
 
-## License
+(Dashboard coming soon!)
 
-Proprietary - Frozo Projects
+---
 
-## Support
+## 🤝 Support
 
-For issues or questions, contact: support@frozo.com
+**For Users:**
+- Email: [hello@frozo.ai](mailto:hello@frozo.ai)
+- Documentation: [docs/](docs/)
+- Issues: [GitHub Issues](https://github.com/ashish-frozo/frozo-zendesk/issues)
+
+**For Developers:**
+- Developer Guide: [docs/DEVELOPER.md](docs/DEVELOPER.md)
+- API Docs: [docs/API.md](docs/API.md)
+- Contributing: [CONTRIBUTING.md](CONTRIBUTING.md)
+
+---
+
+## 📄 License
+
+MIT License - see [LICENSE](LICENSE) file for details.
+
+---
+
+## 🙏 Acknowledgments
+
+Built with:
+- [Microsoft Presidio](https://github.com/microsoft/presidio) - PII detection
+- [spaCy](https://spacy.io/) - NLP engine
+- [FastAPI](https://fastapi.tiangolo.com/) - Web framework
+- [Zendesk Apps Framework](https://developer.zendesk.com/apps/) - Platform
+
+---
+
+## 🗺️ Roadmap
+
+**v1.1** (Coming Soon)
+- [ ] PDF/Image redaction
+- [ ] Custom redaction patterns UI
+- [ ] Analytics dashboard
+- [ ] Multi-language support
+
+**v1.2** (Planned)
+- [ ] ServiceNow integration
+- [ ] GitHub Issues export
+- [ ] AI-powered categorization
+- [ ] Advanced reporting
+
+---
+
+## 📸 Screenshots
+
+### Ticket Sidebar
+![Ticket Sidebar](docs/images/sidebar.png)
+
+### PII Detection Preview
+![Preview Screen](docs/images/preview.png)
+
+### Settings UI
+![Settings](docs/images/settings.png)
+
+### Installation Flow
+![Installation](docs/images/install.png)
+
+---
+
+<div align="center">
+
+**Made with ❤️ by [Frozo](https://frozo.ai)**
+
+[Website](https://frozo.ai) • [Twitter](https://twitter.com/frozo_ai) • [LinkedIn](https://linkedin.com/company/frozo)
+
+</div>
