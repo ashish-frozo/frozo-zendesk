@@ -27,25 +27,30 @@ echo "📦 Preparing package..."
 rm -rf package
 mkdir -p package
 
+# Define package directory variable
+PACKAGE_DIR="package"
+
 # Copy required files
 echo "  → Copying manifest.json"
-cp manifest.json package/
+cp manifest.json "$PACKAGE_DIR/"
 
-echo "  → Copying assets"
-cp -r assets package/
+echo "  → Copying assets (excluding src/)"
+mkdir -p "$PACKAGE_DIR/assets"
+# Copy only necessary HTML and image files
+cp assets/*.html "$PACKAGE_DIR/assets/" 2>/dev/null || true
+cp assets/*.png "$PACKAGE_DIR/assets/" 2>/dev/null || true
+cp assets/*.svg "$PACKAGE_DIR/assets/" 2>/dev/null || true
+
+# DO NOT copy src/ directory - .tsx files not valid for Zendesk packages
 
 echo "  → Copying dist (if exists)"
 if [ -d "dist" ]; then
-    cp -r dist/* package/assets/ 2>/dev/null || true
+    cp -r dist/* "$PACKAGE_DIR/assets/" 2>/dev/null || true
 fi
-
-echo "  → Copying src files"
-cp -r src package/assets/ 2>/dev/null || true
 
 echo "  → Copying translations"
-if [ -d "translations" ]; then
-    cp -r translations package/
-fi
+mkdir -p "$PACKAGE_DIR/translations"
+cp -r translations/* "$PACKAGE_DIR/translations/" 2>/dev/null || true
 
 # Create ZIP
 echo ""
