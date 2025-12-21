@@ -522,25 +522,16 @@
         window.generatePack = async function () {
             renderLoading('Generating preview...');
 
-            // Ensure HTTPS
-            const url = `${apiBaseUrl}/v1/runs/`.replace('http://', 'https://');
-            console.log('[EscalateSafe] POST URL:', url);
-
             try {
-                // Create run
-                const response = await fetch(url, {
+                // Create run using OAuth-enabled API call
+                const response = await apiCall('/v1/runs/', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         ticket_id: String(ticketId),
                         include_internal_notes: false,
                         include_last_public_comments: 1
                     })
                 });
-
-                if (!response.ok) {
-                    throw new Error(`API error: ${response.status}`);
-                }
 
                 const data = await response.json();
                 runId = data.run_id;
@@ -560,41 +551,42 @@
 
             while (attempts < maxAttempts) {
                 try {
-                    const url = `${apiBaseUrl}/v1/runs/${runId}`.replace('http://', 'https://');
-                    const response = await fetch(url);
+                    // Check run status using OAuth-enabled API call
+                    const response = await apiCall(`/v1/runs/${runId}`);
                     const data = await response.json();
 
                     if (data.status === 'ready_for_review') {
                         // Get preview
-                        const previewUrl = `${apiBaseUrl}/v1/runs/${runId}/preview/text`.replace('http://', 'https://');
-                        const previewResponse = await fetch(previewUrl);
-                        const previewData = await previewResponse.json();
-                        renderPreview(previewData);
+                        const previewResponse = await apiCall(`/v1/runs/${runId}/preview/text`);
+                        const previewText = await previewResponse.text();
+
+                        runData = data;
+                        renderPreview(previewText);
                         return;
                     } else if (data.status === 'failed') {
-                        throw new Error('Processing failed');
+                        renderError(data.error || 'Processing failed');
+                        return;
                     }
 
+                    // Wait before next attempt
                     await new Promise(resolve => setTimeout(resolve, 1000));
                     attempts++;
                 } catch (error) {
-                    throw error;
+                    console.error('[EscalateSafe] Polling error:', error);
+                    attempts++;
                 }
             }
 
-            throw new Error('Timeout waiting for preview');
+            renderError('Timeout waiting for results');
         }
 
         window.approveExport = async function () {
             renderLoading('Creating Jira issue...');
 
             try {
-                const url = `${apiBaseUrl}/v1/runs/${runId}/approve`.replace('http://', 'https://');
-                console.log('[EscalateSafe] Approve URL:', url);
-
-                const response = await fetch(url, {
+                // Approve and export using OAuth-enabled API call
+                const response = await apiCall(`/v1/runs/${runId}/approve`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         jira: {
                             project_key: "SCRUM",
@@ -605,10 +597,6 @@
                         slack: { enabled: true }
                     })
                 });
-
-                if (!response.ok) {
-                    throw new Error(`Export failed: ${response.status}`);
-                }
 
                 const data = await response.json();
                 renderSuccess(data.jira_issue_key);
