@@ -397,7 +397,9 @@
             }
         }
 
-        function renderIdle() {
+        
+        window.renderIdle = function renderIdle() {
+            client.invoke('resize', { width: '100%', height: '400px' });
             app.innerHTML = `
                 <div class="info">
                     <strong>Ticket ID:</strong> #${ticketId}<br>
