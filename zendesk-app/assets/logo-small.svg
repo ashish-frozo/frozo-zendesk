@@ -1,0 +1,27 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea"/>
+      <stop offset="100%" style="stop-color:#764ba2"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="200" height="200" rx="40" fill="url(#bg)"/>
+  
+  <!-- Large shield -->
+  <path d="M 100 40 L 145 55 L 145 110 Q 145 140 100 165 Q 55 140 55 110 L 55 55 Z" 
+        fill="#ffffff" 
+        fill-opacity="0.95"
+        stroke="#ffffff" 
+        stroke-width="3"/>
+  
+  <!-- Escalation arrow -->
+  <g fill="#667eea">
+    <rect x="93" y="90" width="14" height="45" rx="2"/>
+    <path d="M 100 75 L 115 92 L 85 92 Z"/>
+  </g>
+  
+  <!-- Security lock accent -->
+  <circle cx="100" cy="120" r="12" fill="#764ba2" opacity="0.2"/>
+</svg>
