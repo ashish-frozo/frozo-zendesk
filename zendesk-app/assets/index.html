@@ -482,10 +482,11 @@
             `;
         }
 
-        function renderPreview(previewText) {
-            // Parse the run data to get stats
-            const stats = runData?.redaction_report || {};
-            const entityCounts = Object.entries(stats.entity_counts || {})
+        function renderPreview(previewData) {
+            // Extract data from preview response
+            const redactedText = previewData.redacted_text || 'No preview available';
+            const summary = previewData.redaction_summary || {};
+            const entityCounts = Object.entries(summary.entities_redacted || {})
                 .map(([type, count]) => `${type}: ${count}`)
                 .join(', ') || 'None detected';
 
@@ -494,12 +495,12 @@
                     <strong>✓ Preview Generated</strong>
                 </div>
                 <div class="preview">
-                    <pre style="white-space: pre-wrap; margin: 0;">${previewText || 'No preview available'}</pre>
+                    <pre style="white-space: pre-wrap; margin: 0;">${redactedText}</pre>
                 </div>
                 <div class="entity-counts">
                     <strong>PII Detected:</strong><br>
                     ${entityCounts}<br>
-                    <strong>Total Redactions:</strong> ${stats.total_redactions || 0}
+                    <strong>Total Redactions:</strong> ${summary.total_redactions || 0}
                 </div>
                 <button class="btn-primary" onclick="approveExport()">
                     ✓ Approve & Create Jira Issue
@@ -559,12 +560,12 @@
                     const data = await response.json();
 
                     if (data.status === 'ready_for_review') {
-                        // Get preview
+                        // Get preview (returns JSON with redacted_text and stats)
                         const previewResponse = await apiCall(`/v1/runs/${runId}/preview/text`);
-                        const previewText = await previewResponse.text();
+                        const previewData = await previewResponse.json();
 
                         runData = data;
-                        renderPreview(previewText);
+                        renderPreview(previewData);
                         return;
                     } else if (data.status === 'failed') {
                         renderError(data.error || 'Processing failed');
