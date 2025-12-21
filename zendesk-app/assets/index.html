@@ -482,22 +482,24 @@
             `;
         }
 
-        function renderPreview(data) {
-            const entityCounts = Object.entries(data.entity_counts || {})
+        function renderPreview(previewText) {
+            // Parse the run data to get stats
+            const stats = runData?.redaction_report || {};
+            const entityCounts = Object.entries(stats.entity_counts || {})
                 .map(([type, count]) => `${type}: ${count}`)
-                .join(', ');
+                .join(', ') || 'None detected';
 
             app.innerHTML = `
                 <div class="info">
                     <strong>✓ Preview Generated</strong>
                 </div>
                 <div class="preview">
-                    <pre style="white-space: pre-wrap; margin: 0;">${data.redacted_text}</pre>
+                    <pre style="white-space: pre-wrap; margin: 0;">${previewText || 'No preview available'}</pre>
                 </div>
                 <div class="entity-counts">
                     <strong>PII Detected:</strong><br>
                     ${entityCounts}<br>
-                    <strong>Total Redactions:</strong> ${data.total_redactions}
+                    <strong>Total Redactions:</strong> ${stats.total_redactions || 0}
                 </div>
                 <button class="btn-primary" onclick="approveExport()">
                     ✓ Approve & Create Jira Issue
