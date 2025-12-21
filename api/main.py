@@ -86,8 +86,10 @@ app.include_router(health.router, prefix="/v1/health", tags=["health"])
 app.include_router(runs.router, prefix="/v1/runs", tags=["runs"])
 app.include_router(config.router, prefix="/v1/config", tags=["config"])
 
-# OAuth router not implemented yet - will add in Phase 3
-# app.include_router(oauth.router, prefix="/v1/oauth", tags=["oauth"])
+# OAuth router for multi-tenant authentication
+from api.routes import oauth
+app.include_router(oauth.router, prefix="/v1/oauth", tags=["oauth"])
+
 # app.include_router(admin.router, prefix="/v1/admin", tags=["admin"])
 
 

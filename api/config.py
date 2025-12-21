@@ -23,6 +23,7 @@ class Settings(BaseSettings):
     zendesk_client_id: str
     zendesk_client_secret: str
     zendesk_redirect_uri: str
+    api_base_url: str = "https://web-production-ccebe.up.railway.app"  # For OAuth callbacks
     
     # Jira
     jira_cloud_id: Optional[str] = None

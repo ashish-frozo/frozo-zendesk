@@ -59,6 +59,17 @@ class Tenant(Base):
     zendesk_installation_id = Column(String(255), unique=True, nullable=True, index=True)
     created_at = Column(DateTime, server_default=func.now(), nullable=False)
     
+    # OAuth fields for per-tenant Zendesk access
+    oauth_access_token = Column(String(500), nullable=True)
+    oauth_refresh_token = Column(String(500), nullable=True)
+    oauth_token_expires_at = Column(DateTime, nullable=True)
+    oauth_scopes = Column(String(200), nullable=True)
+    
+    # Installation tracking
+    installation_id = Column(String(100), unique=True, nullable=True, index=True)
+    installed_at = Column(DateTime, server_default=func.now(), nullable=True)
+    installation_status = Column(String(20), default="pending", nullable=False)
+    
     # Relationships
     users = relationship("TenantUser", back_populates="tenant", cascade="all, delete-orphan")
     config = relationship("TenantConfig", back_populates="tenant", uselist=False, cascade="all, delete-orphan")
