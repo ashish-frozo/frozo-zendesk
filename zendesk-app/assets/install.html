@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>EscalateSafe - Installation</title>
+    <script src="https://static.zdassets.com/zendesk_app_framework_sdk/2.0/zaf_sdk.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 100%;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #1f2937;
+            font-size: 28px;
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            color: #6b7280;
+            font-size: 16px;
+            margin-bottom: 32px;
+            line-height: 1.5;
+        }
+
+        .features {
+            background: #f9fafb;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+            text-align: left;
+        }
+
+        .feature {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .feature:last-child {
+            margin-bottom: 0;
+        }
+
+        .feature-icon {
+            font-size: 20px;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .feature-text {
+            color: #374151;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .btn-authorize {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 16px 32px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-authorize:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn-authorize:active {
+            transform: translateY(0);
+        }
+
+        .btn-authorize:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .loading {
+            display: none;
+            margin-top: 16px;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .loading.visible {
+            display: block;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #e5e7eb;
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .error {
+            background: #fee;
+            color: #c00;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 16px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .error.visible {
+            display: block;
+        }
+
+        .security-note {
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid #e5e7eb;
+            color: #6b7280;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .security-icon {
+            color: #10b981;
+            margin-right: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="logo">🛡️</div>
+        <h1>Welcome to EscalateSafe</h1>
+        <p class="subtitle">
+            Securely escalate support tickets to engineering with automatic PII redaction
+        </p>
+
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">🔒</div>
+                <div class="feature-text">
+                    <strong>PII Protection:</strong> Automatically redacts sensitive information before sharing
+                </div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🎯</div>
+                <div class="feature-text">
+                    <strong>Jira Integration:</strong> Creates engineering tickets with sanitized content
+                </div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">📢</div>
+                <div class="feature-text">
+                    <strong>Slack Notifications:</strong> Alerts your team when escalations are created
+                </div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">✅</div>
+                <div class="feature-text">
+                    <strong>Review Before Export:</strong> Preview and approve all redactions
+                </div>
+            </div>
+        </div>
+
+        <button id="authorizeBtn" class="btn-authorize">
+            🚀 Authorize EscalateSafe
+        </button>
+
+        <div id="loading" class="loading">
+            <span class="spinner"></span>
+            Connecting to Zendesk...
+        </div>
+
+        <div id="error" class="error"></div>
+
+        <div class="security-note">
+            <span class="security-icon">🔐</span>
+            <strong>Secure OAuth 2.0:</strong> We'll redirect you to Zendesk to grant permissions. Your credentials are
+            never shared with us.
+        </div>
+    </div>
+
+    <script>
+        const client = ZAFClient.init();
+        const btn = document.getElementById('authorizeBtn');
+        const loading = document.getElementById('loading');
+        const errorDiv = document.getElementById('error');
+
+        let subdomain = null;
+        let appGuid = null;
+        let apiBaseUrl = 'https://web-production-ccebe.up.railway.app';
+
+        // Get context and metadata
+        Promise.all([
+            client.context(),
+            client.metadata()
+        ]).then(([context, metadata]) => {
+            subdomain = context.account.subdomain;
+            appGuid = metadata.appId;
+
+            if (metadata.settings && metadata.settings.api_base_url) {
+                apiBaseUrl = metadata.settings.api_base_url.replace('http://', 'https://');
+            }
+
+            console.log('[Install] Context:', { subdomain, appGuid, apiBaseUrl });
+
+            // Enable authorize button
+            btn.disabled = false;
+        }).catch(error => {
+            console.error('[Install] Error getting context:', error);
+            showError('Failed to initialize. Please refresh and try again.');
+        });
+
+        btn.addEventListener('click', async () => {
+            if (!subdomain) {
+                showError('Installation context not ready. Please refresh.');
+                return;
+            }
+
+            btn.disabled = true;
+            loading.classList.add('visible');
+            errorDiv.classList.remove('visible');
+
+            try {
+                console.log('[Install] Starting OAuth flow for:', subdomain);
+
+                // Call backend to create tenant and get OAuth URL
+                const response = await fetch(`${apiBaseUrl}/v1/oauth/install`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        subdomain: subdomain,
+                        app_guid: appGuid,
+                        locale: 'en'
+                    })
+                });
+
+                if (!response.ok) {
+                    const error = await response.json().catch(() => ({ detail: 'Unknown error' }));
+                    throw new Error(error.detail || `HTTP ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log('[Install] Got authorization URL:', data.authorization_url);
+
+                // Redirect to Zendesk OAuth
+                window.top.location.href = data.authorization_url;
+
+            } catch (error) {
+                console.error('[Install] Error:', error);
+                showError(`Failed to start authorization: ${error.message}`);
+                btn.disabled = false;
+                loading.classList.remove('visible');
+            }
+        });
+
+        function showError(message) {
+            errorDiv.textContent = message;
+            errorDiv.classList.add('visible');
+        }
+    </script>
+</body>
+
+</html>

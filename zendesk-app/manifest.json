@@ -15,6 +15,9 @@
                 "size": {
                     "height": "600px"
                 }
+            },
+            "top_bar": {
+                "url": "assets/install.html"
             }
         }
     },
