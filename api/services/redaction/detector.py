@@ -81,6 +81,57 @@ class CreditCardRecognizer(PatternRecognizer):
         )
 
 
+class PhoneNumberRecognizer(PatternRecognizer):
+    """Enhanced phone number recognizer for various formats."""
+    
+    PATTERNS = [
+        # US format with country code: +1-555-123-4567
+        Pattern(
+            name="phone_us_international",
+            regex=r"\+1-\d{3}-\d{3}-\d{4}\b",
+            score=0.9
+        ),
+        # US format with parentheses: (555) 123-4567
+        Pattern(
+            name="phone_us_parens",
+            regex=r"\(\d{3}\)\s*\d{3}-\d{4}\b",
+            score=0.9
+        ),
+        # US format with dots: 555.123.4567
+        Pattern(
+            name="phone_us_dots",
+            regex=r"\b\d{3}\.\d{3}\.\d{4}\b",
+            score=0.85
+        ),
+        # US format with spaces: 555 123 4567
+        Pattern(
+            name="phone_us_spaces",
+            regex=r"\b\d{3}\s\d{3}\s\d{4}\b",
+            score=0.85
+        ),
+        # International format: +44 20 1234 5678
+        Pattern(
+            name="phone_international",
+            regex=r"\+\d{1,3}\s?\d{2,4}\s?\d{4,5}\s?\d{4,5}\b",
+            score=0.85
+        ),
+        # Generic format: 123-456-7890 or 1234567890
+        Pattern(
+            name="phone_generic",
+            regex=r"\b\d{3}-\d{3}-\d{4}\b",
+            score=0.8
+        ),
+    ]
+    
+    def __init__(self):
+        super().__init__(
+            supported_entity="PHONE_NUMBER",
+            patterns=self.PATTERNS,
+            name="Enhanced Phone Number Recognizer",
+            supported_language="en"
+        )
+
+
 class IndianPANRecognizer(PatternRecognizer):
     """Recognizer for Indian PAN (Permanent Account Number)."""
     
@@ -177,6 +228,7 @@ class PIIDetector:
         # Add custom recognizers
         self.analyzer.registry.add_recognizer(APIKeyRecognizer())
         self.analyzer.registry.add_recognizer(CreditCardRecognizer())  # Enhanced CC detection
+        self.analyzer.registry.add_recognizer(PhoneNumberRecognizer())  # Enhanced phone detection
         if enable_indian_entities:
             self.analyzer.registry.add_recognizer(IndianPANRecognizer())
             self.analyzer.registry.add_recognizer(IndianGSTINRecognizer())
