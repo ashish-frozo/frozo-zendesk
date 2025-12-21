@@ -31,27 +31,32 @@ class ZendeskService:
         """
         self.subdomain = subdomain
         
-        # For now, using OAuth token. In production, implement full OAuth flow
+        # Try OAuth first, fall back to API token
         if access_token:
+            logger.info(f"Using OAuth authentication for {subdomain}")
             self.client = Zenpy(
                 subdomain=subdomain,
                 oauth_token=access_token
             )
         else:
-            # Fallback to API token for development
-            # In production, this should be removed and OAuth enforced
-            logger.warning("Using API token authentication - should use OAuth in production")
-            # This requires you to set ZENDESK_EMAIL and ZENDESK_API_TOKEN in .env
+            # Fallback to API token for development/transition period
+            logger.warning(f"OAuth token not provided for {subdomain}, falling back to API token authentication")
+            import os
             email = os.getenv("ZENDESK_EMAIL")
             token = os.getenv("ZENDESK_API_TOKEN")
+            
             if email and token:
                 self.client = Zenpy(
                     subdomain=subdomain,
                     email=email,
                     token=token
                 )
+                logger.info(f"Using API token authentication for {subdomain}")
             else:
-                raise ValueError("No Zendesk credentials provided")
+                raise ValueError(
+                    f"No OAuth token provided and no ZENDESK_EMAIL/ZENDESK_API_TOKEN environment variables found. "
+                    f"Either configure OAuth or set environment variables."
+                )
     
     def get_ticket(self, ticket_id: int) -> Dict[str, Any]:
         """
