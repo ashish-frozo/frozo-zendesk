@@ -2,9 +2,10 @@
     "name": "EscalateSafe",
     "author": {
         "name": "Frozo",
-        "email": "support@frozo.com"
+        "email": "support@frozo.com",
+        "url": "https://frozo.ai"
     },
-    "version": "0.1.0",
+    "version": "1.0.0",
     "frameworkVersion": "2.0",
     "location": {
         "support": {
@@ -14,24 +15,24 @@
                 "size": {
                     "height": "600px"
                 }
-            },
-            "nav_bar": {
-                "url": "assets/settings.html"
             }
         }
     },
     "defaultLocale": "en",
-    "private": true,
+    "private": false,
     "parameters": [
         {
             "name": "api_base_url",
             "type": "text",
             "required": true,
-            "default": "https://web-production-ccebe.up.railway.app"
+            "default": "https://web-production-ccebe.up.railway.app",
+            "secure": false,
+            "helpText": "Backend API URL for EscalateSafe service"
         }
     ],
     "domainWhitelist": [
         "web-production-ccebe.up.railway.app",
-        "*.up.railway.app"
+        "*.up.railway.app",
+        "*.railway.app"
     ]
 }

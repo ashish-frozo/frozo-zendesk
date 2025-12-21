@@ -218,9 +218,11 @@
         // State
         let ticketId = null;
         let apiBaseUrl = 'https://web-production-ccebe.up.railway.app'; // Default
+        let subdomain = null; // Customer's Zendesk subdomain for OAuth
         let runId = null;
         let ticketLoaded = false;
         let metadataLoaded = false;
+        let contextLoaded = false;
 
         console.log('[EscalateSafe] Initial API URL:', apiBaseUrl);
 
@@ -235,7 +237,7 @@
             if (metadataLoaded) renderIdle();
         });
 
-        // Get API base URL from settings
+        //Get API base URL from settings
         client.metadata().then(function (metadata) {
             console.log('[EscalateSafe] Metadata:', metadata);
             if (metadata.settings && metadata.settings.api_base_url) {
@@ -251,12 +253,62 @@
             }
             console.log('[EscalateSafe] Final API URL:', apiBaseUrl);
             metadataLoaded = true;
-            if (ticketLoaded) renderIdle();
+            if (ticketLoaded && contextLoaded) renderIdle();
         }).catch(function (error) {
             console.error('[EscalateSafe] Metadata error:', error);
             metadataLoaded = true;
-            if (ticketLoaded) renderIdle();
+            if (ticketLoaded && contextLoaded) renderIdle();
         });
+
+        // Get subdomain from context (for OAuth tenant identification)
+        client.context().then(function (context) {
+            subdomain = context.account.subdomain;
+            console.log('[EscalateSafe] Subdomain:', subdomain);
+            contextLoaded = true;
+            if (ticketLoaded && metadataLoaded) renderIdle();
+        }).catch(function (error) {
+            console.error('[EscalateSafe] Context error:', error);
+            // Try to get from currentAccount as fallback
+            client.get('currentAccount.subdomain').then(function (data) {
+                subdomain = data['currentAccount.subdomain'];
+                console.log('[EscalateSafe] Subdomain (fallback):', subdomain);
+            }).catch(function () {
+                console.warn('[EscalateSafe] Could not get subdomain, using default');
+                subdomain = 'unknown';
+            }).finally(function () {
+                contextLoaded = true;
+                if (ticketLoaded && metadataLoaded) renderIdle();
+            });
+        });
+
+        // Helper function to make API calls with proper headers
+        async function apiCall(endpoint, options = {}) {
+            const headers = {
+                'Content-Type': 'application/json',
+                'X-Zendesk-Subdomain': subdomain,  // For OAuth tenant identification
+                ...options.headers
+            };
+
+            const url = `${apiBaseUrl}${endpoint}`;
+            console.log(`[API] ${options.method || 'GET'} ${url} (tenant: ${subdomain})`);
+
+            try {
+                const response = await fetch(url, {
+                    ...options,
+                    headers
+                });
+
+                if (!response.ok) {
+                    const error = await response.json().catch(() => ({ detail: response.statusText }));
+                    throw new Error(error.detail || `HTTP ${response.status}`);
+                }
+
+                return response;
+            } catch (error) {
+                console.error(`[API] Error calling ${endpoint}:`, error);
+                throw error;
+            }
+        }
 
         // Show settings inline
         window.openSettings = function () {
@@ -397,7 +449,7 @@
             }
         }
 
-        
+
         window.renderIdle = function renderIdle() {
             client.invoke('resize', { width: '100%', height: '400px' });
             app.innerHTML = `

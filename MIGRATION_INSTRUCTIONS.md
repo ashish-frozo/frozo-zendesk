@@ -1,60 +1,68 @@
-# OAuth Database Migration Instructions
+# Run OAuth Migration - Simple Instructions
 
-## Run This Migration on Railway
+## Quick Method: Python Script
 
-**Via Railway Dashboard:**
-1. Go to Railway → Your Project → PostgreSQL
-2. Click "Query" tab
-3. Copy and paste this SQL:
+1. **Get DATABASE_URL from Railway:**
+   - Go to Railway Dashboard
+   - Click on PostgreSQL service
+   - Go to "Variables" tab
+   - Copy the `DATABASE_URL` value
 
-```sql
--- Migration: Add OAuth support to tenants table
+2. **Run the migration script:**
+   ```bash
+   cd /Users/ashishdhiman/WORK/Frozo-projects/frozo-zendesk
+   python run_migration.py
+   ```
 
--- Add OAuth token columns
-ALTER TABLE tenants 
-ADD COLUMN IF NOT EXISTS oauth_access_token VARCHAR(500),
-ADD COLUMN IF NOT EXISTS oauth_refresh_token VARCHAR(500),
-ADD COLUMN IF NOT EXISTS oauth_token_expires_at TIMESTAMP,
-ADD COLUMN IF NOT EXISTS oauth_scopes VARCHAR(200);
+3. **When prompted, paste your DATABASE_URL**
 
--- Add installation tracking columns
-ALTER TABLE tenants
-ADD COLUMN IF NOT EXISTS installation_id VARCHAR(100) UNIQUE,
-ADD COLUMN IF NOT EXISTS installed_at TIMESTAMP DEFAULT NOW(),
-ADD COLUMN IF NOT EXISTS installation_status VARCHAR(20) DEFAULT 'pending';
+4. **Done!** The script will:
+   - Connect to Railway database
+   - Add OAuth columns
+   - Verify they were added
+   - Show you the new columns
 
--- Create indexes for performance
-CREATE INDEX IF NOT EXISTS idx_tenants_installation_id ON tenants(installation_id);
-CREATE INDEX IF NOT EXISTS idx_tenants_subdomain ON tenants(zendesk_subdomain);
-CREATE INDEX IF NOT EXISTS idx_tenants_status ON tenants(installation_status);
+## Expected Output:
+
+```
+Connecting to containers-us-west-xxx.railway.app:5432/railway...
+Running OAuth migration...
+✅ Migration complete!
+
+Verifying new columns...
+
+New columns:
+  - installation_id: character varying
+  - installation_status: character varying
+  - installed_at: timestamp without time zone
+  - oauth_access_token: character varying
+  - oauth_refresh_token: character varying
+  - oauth_scopes: character varying  
+  - oauth_token_expires_at: timestamp without time zone
+
+✅ All done! OAuth columns added successfully.
 ```
 
-4. Click "Run Query"
-5. Verify: Run `SELECT * FROM tenants LIMIT 1;` to see new columns
+## Troubleshooting
 
-## Verify Migration
+**If you see "connection refused":**
+- Check DATABASE_URL is correct
+- Make sure you copied the entire URL including `postgresql://`
 
-Check that these columns exist:
-- oauth_access_token
-- oauth_refresh_token  
-- oauth_token_expires_at
-- oauth_scopes
-- installation_id
-- installed_at
-- installation_status
+**If you see "permission denied":**
+- The Railway database user should have ALTER TABLE permissions (it should by default)
+
+**If columns already exist:**
+- The script uses `IF NOT EXISTS` so it's safe to run multiple times
+- You'll see no errors, just "Migration complete!"
 
 ## After Migration
 
-Railway will automatically detect the code changes and redeploy with OAuth endpoints active.
+1. Check Railway logs - backend should still be running fine
+2. Test OAuth endpoint:
+   ```bash
+   curl https://web-production-ccebe.up.railway.app/v1/oauth/status
+   ```
+   Should return: `{"total_tenants": X, "tenants": [...]}`
 
-Check logs for:
-```
-INFO:     Application startup complete.
-```
-
-Then test OAuth endpoint:
-```bash
-curl https://web-production-ccebe.up.railway.app/v1/oauth/status
-```
-
-Should return list of tenants (currently empty or with existing tenant).
+3. Ready for Phase 4 (Frontend updates)!
