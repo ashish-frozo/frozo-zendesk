@@ -51,17 +51,11 @@ app = FastAPI(
     root_path_in_servers=False
 )
 
-# CORS middleware for Zendesk app
+# CORS middleware - Allow all origins for Zendesk app compatibility
+# Zendesk app domains are dynamic (*.apps.zdusercontent.com) and CORS doesn't support wildcards properly
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "http://localhost:5173",
-        "https://frozoai.zendesk.com",
-        "https://*.zendesk.com",
-        "https://*.apps.zdusercontent.com",  # Zendesk app iframe domains
-        "https://1198277.apps.zdusercontent.com",  # Specific Zendesk app domain
-    ],
+    allow_origins=["*"],  # Allow all - required for dynamic Zendesk app domains
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
