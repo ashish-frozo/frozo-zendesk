@@ -157,10 +157,22 @@ async def create_run(
                 last_n_public=request.include_last_public_comments
             )
             
-            # Combine text for PII detection
+            # Combine text for PII detection with deduplication
             text_to_analyze = ticket_data["description"]
+            description_normalized = ticket_data["description"].strip().lower()
+            
+            # Add comments, skipping duplicates of the description
             for comment in comments:
-                text_to_analyze += "\n\n" + comment["body"]
+                comment_body = comment["body"].strip()
+                comment_normalized = comment_body.lower()
+                
+                # Skip if comment is identical or very similar to description (80%+ match)
+                if comment_normalized and comment_normalized != description_normalized:
+                    # Simple similarity check - if 80% of description is in comment, skip it
+                    if len(description_normalized) > 50 and description_normalized in comment_normalized:
+                        logger.info(f"Skipping duplicate comment (matches description)")
+                        continue
+                    text_to_analyze += "\n\n" + comment_body
             
         except ValueError as e:
             # OAuth not configured

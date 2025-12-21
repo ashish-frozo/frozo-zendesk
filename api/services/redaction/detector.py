@@ -48,6 +48,39 @@ class APIKeyRecognizer(PatternRecognizer):
         )
 
 
+class CreditCardRecognizer(PatternRecognizer):
+    """Enhanced credit card recognizer for various formats."""
+    
+    PATTERNS = [
+        # Standard format with dashes: 4532-1234-5678-9012
+        Pattern(
+            name="cc_dashed",
+            regex=r"\b\d{4}-\d{4}-\d{4}-\d{4}\b",
+            score=0.85
+        ),
+        # Format with spaces: 4532 1234 5678 9012
+        Pattern(
+            name="cc_spaced",
+            regex=r"\b\d{4}\s\d{4}\s\d{4}\s\d{4}\b",
+            score=0.85
+        ),
+        # Partial card number (last 4 or last 8): ending in 9012 or 5678-9012
+        Pattern(
+            name="cc_partial",
+            regex=r"(?:ending\s+in|last\s+\d+\s+digits?[:\s]+)(\d{4}(?:-\d{4})?)",
+            score=0.9
+        ),
+    ]
+    
+    def __init__(self):
+        super().__init__(
+            supported_entity="CREDIT_CARD",
+            patterns=self.PATTERNS,
+            name="Enhanced Credit Card Recognizer",
+            supported_language="en"
+        )
+
+
 class IndianPANRecognizer(PatternRecognizer):
     """Recognizer for Indian PAN (Permanent Account Number)."""
     
@@ -143,6 +176,7 @@ class PIIDetector:
         
         # Add custom recognizers
         self.analyzer.registry.add_recognizer(APIKeyRecognizer())
+        self.analyzer.registry.add_recognizer(CreditCardRecognizer())  # Enhanced CC detection
         if enable_indian_entities:
             self.analyzer.registry.add_recognizer(IndianPANRecognizer())
             self.analyzer.registry.add_recognizer(IndianGSTINRecognizer())
