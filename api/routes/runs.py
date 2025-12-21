@@ -61,7 +61,7 @@ def get_current_tenant(db: Session, subdomain: str = "demo") -> Tenant:
 
 @router.post("/", response_model=RunCreateResponse, status_code=status.HTTP_201_CREATED)
 async def create_run(
-    request: RunCreate Request,
+    request: RunCreateRequest,
     x_zendesk_subdomain: Optional[str] = Header(None, alias="X-Zendesk-Subdomain"),
     db: Session = Depends(get_db)
 ):
