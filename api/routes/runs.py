@@ -12,7 +12,7 @@ Endpoints:
 import logging
 import hashlib
 from typing import Optional
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Header
 from sqlalchemy.orm import Session
 
 from api.db.database import get_db
@@ -27,7 +27,7 @@ from api.schemas.runs import (
     RedactionReportResponse
 )
 from api.services.redaction import create_detector, create_redactor
-from api.services.integrations.zendesk import get_zendesk_client
+from api.services.integrations.zendesk_oauth import get_zendesk_client_for_tenant
 
 logger = logging.getLogger(__name__)
 
@@ -61,7 +61,8 @@ def get_current_tenant(db: Session, subdomain: str = "demo") -> Tenant:
 
 @router.post("/", response_model=RunCreateResponse, status_code=status.HTTP_201_CREATED)
 async def create_run(
-    request: RunCreateRequest,
+    request: RunCreate Request,
+    x_zendesk_subdomain: Optional[str] = Header(None, alias="X-Zendesk-Subdomain"),
     db: Session = Depends(get_db)
 ):
     """
@@ -75,11 +76,35 @@ async def create_run(
     5. Store run with status=ready_for_review
     """
     try:
-        # Get tenant (simplified - should come from middleware)
-        # Use environment variable or default to 'demo'
-        from api.config import settings
-        actual_subdomain = settings.zendesk_subdomain if hasattr(settings, 'zendesk_subdomain') else "frozoai"
-        tenant = get_current_tenant(db, subdomain=actual_subdomain)
+        # Get tenant from subdomain header (OAuth-enabled)
+        if not x_zendesk_subdomain:
+            # Fallback for development/testing
+            from api.config import settings
+            x_zendesk_subdomain = getattr(settings, 'zendesk_subdomain', 'frozoai')
+            logger.warning(f"No subdomain header, using fallback: {x_zendesk_subdomain}")
+        
+        tenant = db.query(Tenant).filter(
+            Tenant.zendesk_subdomain == x_zendesk_subdomain
+        ).first()
+        
+        if not tenant:
+            # For development, create tenant if not exists
+            logger.warning(f"Creating new tenant for subdomain: {x_zendesk_subdomain}")
+            tenant = Tenant(zendesk_subdomain=x_zendesk_subdomain)
+            db.add(tenant)
+            db.commit()
+            db.refresh(tenant)
+            
+            # Create default config
+            config = TenantConfig(
+                tenant_id=tenant.id,
+                redaction_config={"enable_indian_entities": False},
+                jira_config={},
+                slack_config={},
+                llm_config={}
+            )
+            db.add(config)
+            db.commit()
         
         # Get tenant config
         config = db.query(TenantConfig).filter(TenantConfig.tenant_id == tenant.id).first()
@@ -119,9 +144,12 @@ async def create_run(
         db.add(audit)
         db.commit()
         
-        # Fetch ticket from Zendesk
+        # Fetch ticket from Zendesk using OAuth
         try:
-            zendesk = get_zendesk_client(subdomain=tenant.zendesk_subdomain)
+            # Use OAuth-enabled Zendesk client
+            zendesk = get_zendesk_client_for_tenant(tenant, db)
+            logger.info(f"Fetching ticket {request.ticket_id} for tenant {tenant.zendesk_subdomain} using OAuth")
+            
             ticket_data = zendesk.get_ticket(int(request.ticket_id))
             comments = zendesk.get_comments(
                 ticket_id=int(request.ticket_id),
@@ -134,6 +162,15 @@ async def create_run(
             for comment in comments:
                 text_to_analyze += "\n\n" + comment["body"]
             
+        except ValueError as e:
+            # OAuth not configured
+            logger.error(f"OAuth error for tenant {tenant.id}: {e}")
+            run.status = RunStatus.FAILED
+            db.commit()
+            raise HTTPException(
+                status_code=401,
+                detail="OAuth not configured. Please reinstall the app to grant permissions."
+            )
         except Exception as e:
             logger.error(f"Failed to fetch ticket {request.ticket_id}: {e}")
             run.status = RunStatus.FAILED
