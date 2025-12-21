@@ -52,6 +52,12 @@ echo "  → Copying translations"
 mkdir -p "$PACKAGE_DIR/translations"
 cp -r translations/* "$PACKAGE_DIR/translations/" 2>/dev/null || true
 
+echo "  → Copying screenshots"
+if [ -d "screenshots" ]; then
+    mkdir -p "$PACKAGE_DIR/screenshots"
+    cp screenshots/*.png "$PACKAGE_DIR/screenshots/" 2>/dev/null || true
+fi
+
 # Create ZIP
 echo ""
 echo "🗜️  Creating ZIP package..."
