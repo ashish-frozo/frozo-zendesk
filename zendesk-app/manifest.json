@@ -37,5 +37,12 @@
         "web-production-ccebe.up.railway.app",
         "*.up.railway.app",
         "*.railway.app"
-    ]
+    ],
+    "marketing": {
+        "screenshots": [
+            "screenshots/screenshot1.png",
+            "screenshots/screenshot2.png",
+            "screenshots/screenshot3.png"
+        ]
+    }
 }
