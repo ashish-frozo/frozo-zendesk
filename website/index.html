@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EscalateSafe - PII-Safe Zendesk to Jira Escalation</title>
+    <meta name="description"
+        content="Securely escalate support tickets to engineering with automatic PII redaction. Protect customer privacy while sharing issues with your team.">
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="container">
+            <div class="nav-content">
+                <div class="logo">
+                    <div class="logo-icon">🛡️</div>
+                    <span class="logo-text">EscalateSafe</span>
+                </div>
+                <div class="nav-links">
+                    <a href="#features">Features</a>
+                    <a href="#pricing">Pricing</a>
+                    <a href="#faq">FAQ</a>
+                    <a href="https://github.com/ashish-frozo/frozo-zendesk" target="_blank">Docs</a>
+                    <a href="#contact" class="btn-secondary">Contact</a>
+                    <a href="https://www.zendesk.com/marketplace/" target="_blank" class="btn-primary">Install Now</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">🚀 Now Available on Zendesk Marketplace</div>
+                <h1 class="hero-title">
+                    Escalate Safely,<br />
+                    <span class="gradient-text">Protect Privacy</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Automatically detect and redact PII before sharing support tickets with engineering.
+                    GDPR compliant. AI-powered. One-click integration.
+                </p>
+                <div class="hero-cta">
+                    <a href="https://www.zendesk.com/marketplace/" class="btn-large btn-primary">
+                        Get Started Free
+                        <span class="arrow">→</span>
+                    </a>
+                    <a href="#demo" class="btn-large btn-outline">
+                        Watch Demo
+                        <span class="play">▶</span>
+                    </a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-number">15+</div>
+                        <div class="stat-label">PII Types Detected</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">99%+</div>
+                        <div class="stat-label">Detection Accuracy</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">&lt;10s</div>
+                        <div class="stat-label">Processing Time</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-bg"></div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Everything You Need for Safe Escalations</h2>
+                <p>Powered by AI. Built for compliance. Loved by teams.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>AI-Powered PII Detection</h3>
+                    <p>Automatically detects names, emails, phone numbers, credit cards, API keys, and 15+ other
+                        sensitive data types using Microsoft Presidio.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>One-Click Escalation</h3>
+                    <p>Generate sanitized engineering packs in seconds. Review redacted preview before exporting to Jira
+                        with a single click.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Jira Integration</h3>
+                    <p>Automatically creates Jira issues with redacted content. Configurable project, issue type, and
+                        priority. Clickable links back to tickets.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📢</div>
+                    <h3>Slack Notifications</h3>
+                    <p>Notify your team instantly when escalations are created. Custom channels, rich formatting, and
+                        Jira links included.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🛡️</div>
+                    <h3>GDPR Compliant</h3>
+                    <p>Privacy by design. No PII stored. Complete audit trail. Encrypted OAuth tokens. SOC 2 Type II in
+                        progress.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚙️</div>
+                    <h3>Easy Setup</h3>
+                    <p>Install from marketplace in minutes. Configure Jira and Slack directly in the app. No admin panel
+                        needed.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <h2>How It Works</h2>
+                <p>From ticket to escalation in 3 simple steps</p>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Generate Pack</h3>
+                        <p>Open any Zendesk ticket and click "Generate Engineering Pack" in the sidebar</p>
+                    </div>
+                </div>
+                <div class="step-connector"></div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Review Preview</h3>
+                        <p>See exactly what engineering will receive. All PII automatically redacted with confidence
+                            scores</p>
+                    </div>
+                </div>
+                <div class="step-connector"></div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Approve & Export</h3>
+                        <p>One click creates Jira issue and sends Slack notification. Clickable links to track
+                            everything</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="pricing">
+        <div class="container">
+            <div class="section-header">
+                <h2>Simple, Transparent Pricing</h2>
+                <p>Start free. Scale as you grow.</p>
+            </div>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3>Free</h3>
+                        <div class="price">
+                            <span class="currency">$</span>
+                            <span class="amount">0</span>
+                            <span class="period">/month</span>
+                        </div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>✓ 10 escalations per month</li>
+                        <li>✓ All PII detection features</li>
+                        <li>✓ Jira integration</li>
+                        <li>✓ Slack notifications</li>
+                        <li>✓ Community support</li>
+                    </ul>
+                    <a href="https://www.zendesk.com/marketplace/" class="btn-outline btn-block">Get Started</a>
+                </div>
+
+                <div class="pricing-card featured">
+                    <div class="popular-badge">Most Popular</div>
+                    <div class="pricing-header">
+                        <h3>Pro</h3>
+                        <div class="price">
+                            <span class="currency">$</span>
+                            <span class="amount">29</span>
+                            <span class="period">/month</span>
+                        </div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>✓ Unlimited escalations</li>
+                        <li>✓ All PII detection features</li>
+                        <li>✓ Jira + Slack integration</li>
+                        <li>✓ Custom redaction patterns</li>
+                        <li>✓ Priority email support</li>
+                        <li>✓ Advanced analytics</li>
+                    </ul>
+                    <a href="#contact" class="btn-primary btn-block">Upgrade to Pro</a>
+                </div>
+
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3>Enterprise</h3>
+                        <div class="price">
+                            <span class="amount">Custom</span>
+                        </div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>✓ Everything in Pro</li>
+                        <li>✓ Dedicated support</li>
+                        <li>✓ SLA guarantees</li>
+                        <li>✓ Custom integrations</li>
+                        <li>✓ On-premise deployment</li>
+                        <li>✓ Training & onboarding</li>
+                    </ul>
+                    <a href="#contact" class="btn-outline btn-block">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="faq">
+        <div class="container">
+            <div class="section-header">
+                <h2>Frequently Asked Questions</h2>
+            </div>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <h3>How does PII detection work?</h3>
+                    <p>We use Microsoft Presidio, an industry-standard AI-powered detection engine, combined with spaCy
+                        NLP and custom patterns to detect 15+ types of sensitive information including names, emails,
+                        phone numbers, credit cards, and API keys.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Is it GDPR compliant?</h3>
+                    <p>Yes! We never store original PII - only redacted content. All OAuth tokens are encrypted at rest.
+                        Complete audit trail. Privacy by design. SOC 2 Type II certification in progress.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>How long does setup take?</h3>
+                    <p>Installation takes less than 5 minutes. Simply install from Zendesk Marketplace, configure your
+                        Jira credentials, and you're ready to escalate safely.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Can I customize what gets redacted?</h3>
+                    <p>Pro and Enterprise plans include custom redaction patterns. Configure your own regex patterns or
+                        entity types to match your specific compliance needs.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>What happens if detection fails?</h3>
+                    <p>You always review a preview before exporting. Low-confidence detections are flagged with
+                        warnings. You can cancel and manually sanitize if needed.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Do you support other ticketing systems?</h3>
+                    <p>Currently Zendesk only. ServiceNow and Freshdesk integrations are on our roadmap. Contact us if
+                        you need a specific integration.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h2>Get in Touch</h2>
+                    <p>Have questions? Want to upgrade? Need custom deployment?</p>
+                    <div class="contact-methods">
+                        <div class="contact-method">
+                            <span class="icon">📧</span>
+                            <div>
+                                <div class="label">Email</div>
+                                <a href="mailto:hello@frozo.ai">hello@frozo.ai</a>
+                            </div>
+                        </div>
+                        <div class="contact-method">
+                            <span class="icon">💬</span>
+                            <div>
+                                <div class="label">Response Time</div>
+                                <span>&lt; 24 hours</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <form class="contact-form" id="contactForm">
+                    <input type="text" placeholder="Your Name" required>
+                    <input type="email" placeholder="Your Email" required>
+                    <input type="text" placeholder="Company (optional)">
+                    <select required>
+                        <option value="">I'm interested in...</option>
+                        <option value="free">Free Tier</option>
+                        <option value="pro">Pro Plan</option>
+                        <option value="enterprise">Enterprise</option>
+                        <option value="demo">Schedule Demo</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <textarea placeholder="Your Message" rows="4" required></textarea>
+                    <button type="submit" class="btn-primary btn-block">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-col">
+                    <div class="logo">
+                        <div class="logo-icon">🛡️</div>
+                        <span class="logo-text">EscalateSafe</span>
+                    </div>
+                    <p>Privacy-first ticket escalation for modern support teams.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Product</h4>
+                    <a href="#features">Features</a>
+                    <a href="#pricing">Pricing</a>
+                    <a href="https://github.com/ashish-frozo/frozo-zendesk">Documentation</a>
+                    <a href="https://www.zendesk.com/marketplace/">Install</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <a href="https://frozo.ai">About</a>
+                    <a href="#contact">Contact</a>
+                    <a href="/privacy">Privacy Policy</a>
+                    <a href="/terms">Terms of Service</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Resources</h4>
+                    <a href="https://github.com/ashish-frozo/frozo-zendesk">GitHub</a>
+                    <a href="#faq">FAQ</a>
+                    <a href="/security">Security</a>
+                    <a href="/changelog">Changelog</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Frozo. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="/privacy">Privacy</a>
+                    <a href="/terms">Terms</a>
+                    <a href="/security">Security</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="static/js/main.js"></script>
+</body>
+
+</html>
